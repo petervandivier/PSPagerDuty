@@ -6,13 +6,15 @@
         Send a PagerDuty event to the v2 Events API
 
         See PagerDuty documentation for more information:
-        https://v2.developer.pagerduty.com/docs/send-an-event-events-api-v2
+        https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTgx-send-an-alert-event
+    .LINK
+        https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTgx-send-an-alert-event
     .PARAMETER IntegrationKey
-        Service integration key to route this event to
+        Mandatory. Service integration key to route this event to
     .PARAMETER DedupeKey
         Dedup_key to identify unique alerts
     .PARAMETER Summary
-        Summary or title of the alert
+        Mandatory. Summary or title of the alert
     .PARAMETER Time
         Time for the alert.  Default: Now
     .PARAMETER Source
@@ -45,7 +47,7 @@
             text='description of URL'
         }
     .PARAMETER Action
-        Action to take.  trigger, acknowledge, or resolve
+        Mandatory. Action to take.  trigger, acknowledge, or resolve
     .PARAMETER Client
         Client generating this alert
     .PARAMETER ClientUrl
@@ -71,11 +73,18 @@
 #>
 [cmdletbinding()]
 param (
+    [Parameter(Mandatory)]
+    [ValidateLength(32)]
     [string]$IntegrationKey,
+    [ValidateLength(1,255)]
     [string]$DedupeKey,
+    [Parameter(Mandatory)]
+    [ValidateLength(1,1024)]
     [string]$Summary,
     [datetime]$Time,
+    [Parameter(Mandatory)]
     [string]$Source,
+    [Parameter(Mandatory)]
     [validateset('critical', 'error', 'warning', 'info')]
     [string]$Severity,
     [string]$Component,
@@ -84,6 +93,7 @@ param (
     [object]$Details,
     [hashtable[]]$Images, #src, href, alt
     [hashtable[]]$Links, #href, text
+    [Parameter(Mandatory)]
     [validateset('trigger', 'resolve', 'acknowledge')]
     [string]$Action,
     [string]$Client,
